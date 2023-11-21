@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Union
 import requests
 
-MB_API = "https://mb-api.abuse.ch/api/v1"
+MB_API = "https://mb-api.abuse.ch/api/v1/"
 
 
 class QueryType(Enum):
