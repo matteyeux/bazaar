@@ -17,12 +17,12 @@ class QueryType(Enum):
 class Bazaar:
     """MalwareBazaar wrapper class."""
 
-    def __init__(self, api_key: str = None):
-        if api_key is None:
+    def __init__(self, api_key: str = ""):
+        if not api_key:
             raise Exception("No API key specified")
 
         self.api_key = api_key
-        self.headers = {"API-KEY": api_key}
+        self.headers = {"Auth-Key": self.api_key}
 
     def __repr__(self):
         return "<bazaar.bazaarwrapper.Bazaar(api_key='{}')>".format(self.api_key)
@@ -48,8 +48,8 @@ class Bazaar:
             timeout=50,
         )
         if raw:
-            return response  # type: requests.Response
-        return response.json()  # dict
+            return response
+        return response.json()
 
     def list_samples(self, query_type: QueryType, key: str, limit: int = 50) -> dict:
         """Currently only lists by tags."""
@@ -72,7 +72,7 @@ class Bazaar:
             data={"query": query_type.value, key_type: key, "limit": limit},
         )
 
-        if samples.get("data", {}) == {}:
+        if samples.get("data", {}) == {}:  # type: ignore
             return samples.get("query_status")
 
         return samples
